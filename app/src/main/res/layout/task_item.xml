@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/item_task_name"
-        android:layout_width="320dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/item_date"
-        android:layout_width="320dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"

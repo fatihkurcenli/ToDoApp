@@ -22,30 +22,61 @@ class TaskActivity : AppCompatActivity() {
         setActionBar(binding.taskToolbar)
         actionBar?.title = "Add Todo"
         taskRepository = TaskRepository(this)
+
+        if (intent.extras != null) {
+            val task: Task = intent.extras?.getSerializable(MainActivity.EXTRA_TASK) as Task
+            binding.taskNameEdt.setText(task.name)
+            binding.endDateText.setText(task.date)
+        }
+
+
         binding.confirmFab.setOnClickListener {
-            if (!TextUtils.isEmpty(binding.taskNameEdt.text.toString())) {
-                val date: String =
-                    if (binding.endDateText.text == null || binding.endDateText.text == getString(R.string.end_date)) "No end date"
-                    else binding.endDateText.text.toString()
-                val rowId = taskRepository.insertTask(
+            if (intent.extras != null) {
+
+                val task: Task = intent.extras?.getSerializable(MainActivity.EXTRA_TASK) as Task
+                val rowId = taskRepository.updateTask(
                     Task(
-                        name = binding.taskNameEdt.text.toString(),
-                        date = date
+                        task.id,
+                        binding.taskNameEdt.text.toString(),
+                        binding.endDateText.text.toString()
                     )
                 )
+
                 if (rowId > -1) {
-                    Toast.makeText(this, "Eklendi", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Güncellendi", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this, "Ekleme başarısız", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Güncelleme başarısız", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Task adı Boş geçilemez", Toast.LENGTH_SHORT).show()
+                if (!TextUtils.isEmpty(binding.taskNameEdt.text.toString())) {
+                    val date: String =
+                        if (binding.endDateText.text == null || binding.endDateText.text == getString(
+                                R.string.end_date
+                            )
+                        ) "No end date"
+                        else binding.endDateText.text.toString()
+                    val rowId = taskRepository.insertTask(
+                        Task(
+                            name = binding.taskNameEdt.text.toString(),
+                            date = date
+                        )
+                    )
+                    if (rowId > -1) {
+                        Toast.makeText(this, "Eklendi", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Ekleme başarısız", Toast.LENGTH_SHORT).show()
+                    }
+
+                } else {
+                    Toast.makeText(this, "Task adı Boş geçilemez", Toast.LENGTH_SHORT).show()
+                }
             }
 
         }
         binding.endDateLayout.setOnClickListener {
             getDateDialog()
         }
+
     }
 
     private fun getDateDialog() {

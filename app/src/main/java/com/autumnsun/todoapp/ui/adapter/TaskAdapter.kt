@@ -12,6 +12,9 @@ import com.autumnsun.todoapp.model.Task
 
 class TaskAdapter(var context: Context, var taskList: ArrayList<Task>) :
     RecyclerView.Adapter<TaskAdapter.ViewHolder>() {
+    private lateinit var onTaskComplateListener: OnTaskCompleteListener
+    private lateinit var onTaskEditListener: OnTaskEditListener
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val taskName = view.findViewById<TextView>(R.id.item_task_name)
         val taskDate = view.findViewById<TextView>(R.id.item_date)
@@ -28,11 +31,41 @@ class TaskAdapter(var context: Context, var taskList: ArrayList<Task>) :
     override fun onBindViewHolder(holder: TaskAdapter.ViewHolder, position: Int) {
         holder.taskName.text = taskList[position].name
         holder.taskDate.text = taskList[position].date
+        holder.completeCheckBox.isChecked = false
+        holder.completeCheckBox.setOnClickListener {
+            onTaskComplateListener.let {
+                it.onTaskComplete(taskList[position].id)
+            }
+        }
+        holder.itemView.setOnCreateContextMenuListener { menu, v, menuInfo ->
+            menu.add("Edit").setOnMenuItemClickListener {
+                onTaskEditListener.let {
+                    it.onEditTask(taskList[position])
+                }
+                return@setOnMenuItemClickListener true
+            }
+        }
+    }
+
+    fun setOnTaskCompleteListener(onTaskCompleteListener: OnTaskCompleteListener) {
+        this.onTaskComplateListener = onTaskCompleteListener
+    }
+
+    fun setOnTaskEditListener(OnTaskEditListener: OnTaskEditListener) {
+        this.onTaskEditListener = OnTaskEditListener
     }
 
     fun updateList(newList: ArrayList<Task>) {
         taskList.clear()
         taskList.addAll(newList)
         notifyDataSetChanged()
+    }
+
+    interface OnTaskCompleteListener {
+        fun onTaskComplete(taskId: Int)
+    }
+
+    interface OnTaskEditListener {
+        fun onEditTask(task: Task)
     }
 }
