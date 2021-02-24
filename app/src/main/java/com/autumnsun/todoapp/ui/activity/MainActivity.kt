@@ -1,20 +1,58 @@
-package com.autumnsun.todoapp
+package com.autumnsun.todoapp.ui.activity
 
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.autumnsun.todoapp.databinding.ActivityMainBinding
+import com.autumnsun.todoapp.db.TaskRepository
+import com.autumnsun.todoapp.model.Task
+import com.autumnsun.todoapp.ui.adapter.TaskAdapter
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var taskRepository: TaskRepository
+    private lateinit var taskList: ArrayList<Task>
+    private lateinit var adapter: TaskAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setActionBar(binding.mainToolbar)
         supportActionBar?.title = "TODO-List"
+
+        taskRepository = TaskRepository(this)
+        taskList = taskRepository.getAllTask()
+
+        binding.taskRecyclerview.layoutManager = LinearLayoutManager(this)
+        adapter = TaskAdapter(this, taskList)
+        binding.taskRecyclerview.adapter = adapter
+        binding.taskRecyclerview.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+
+        binding.addTaskFloatingButton.setOnClickListener {
+            try {
+                startActivity(Intent(this@MainActivity, TaskActivity::class.java))
+            } catch (e: Exception) {
+                Log.d("mainAcitivity", e.toString())
+            }
+
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        taskList = taskRepository.getAllTask()
+        adapter.updateList(taskList)
     }
 }
 

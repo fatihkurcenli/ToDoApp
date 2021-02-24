@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TaskActivity">
+    tools:context=".ui.activity.TaskActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/add_task_appbar"
@@ -18,23 +18,13 @@
             android:background="@color/kPrimaryColor"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-        <com.google.android.material.textfield.TextInputLayout
+        <EditText
+            android:id="@+id/task_name_edt"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="32dp"
-            android:textColorHint="@android:color/white"
-            android:theme="@style/TextLabel">
-
-            <EditText
-                android:id="@+id/task_name_edt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Task add"
-                android:textColorHint="@color/white"
-                android:textSize="30sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:hint="Task add"
+            android:textColorHint="@color/white"
+            android:textSize="30sp" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -53,6 +43,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
+            android:id="@+id/end_date_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -64,6 +55,7 @@
                 android:src="@drawable/ic_date_range" />
 
             <TextView
+                android:id="@+id/end_date_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -71,9 +63,5 @@
                 android:text="@string/end_date"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
         </LinearLayout>
-
-
     </LinearLayout>
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
